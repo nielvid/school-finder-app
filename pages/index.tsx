@@ -1,8 +1,54 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useState } from 'react'
+import axios from 'axios'
 
 const Home: NextPage = () => {
+
+  const [image, setImage] = useState({ preview: '', data: '' })
+  const [data, setData] = useState({ name: '', type: '' })
+  const [status, setStatus] = useState('')
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    let formData = new FormData()
+    formData.append('file', image.data)
+   
+    console.log(image.data, "image")
+   
+      console.log(data, "name and type")
+      
+    const response = await axios.post ('http://localhost:3010/utility/get-signed-url', data, {
+      headers:{
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InR5ZUBnbWFpbC5jb20iLCJ1c2VySWQiOiIzMjFjYjc1MC1iYTdkLTRlYjgtODZkNS1iYTIyMzBjMWNhNjYiLCJyb2xlIjoiY2xpZW50IiwiZmlyc3ROYW1lIjoiWWVzamoiLCJsYXN0bmFtZSI6Ikdpc3N5aGgiLCJpYXQiOjE2NDU1MzUzMjcsImV4cCI6MTY1MDcxOTMyN30.RHfuJEmd6nlZPq9jvteIt4THYwCJablnSbomYEzR_Ec`
+      }
+    })
+    if (response) setStatus(response.statusText)
+  
+       console.log(response, "from server")
+       console.log(response.data.data.data, 'url to upload to  aws s3')
+ const toS3 = await axios.put(`https://cors-anywhere.herokuapp.com/${response.data.data.data}`, formData)
+    console.log(toS3, 'response from aws s3')
+
+  }
+
+  const handleFileChange = (e) => {
+    const img = {
+      preview: URL.createObjectURL(e.target.files[0]),
+      data: e.target.files[0],
+    }
+
+     const data  = {
+      name: e.target.files[0].name,
+      type: e.target.files[0].type
+    }
+
+    setImage(img)
+     setData(data)
+  }
+  
+  
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
       <Head>
@@ -10,75 +56,21 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            pages/index.tsx
-          </code>
-        </p>
-
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+      <main className='flex-auto'>
+      Home page
+    <div>
+      <h1>Upload to server</h1>
+      {image.preview && <img src={image.preview} width='100' height='100' />}
+      <hr></hr>
+      <form onSubmit={handleSubmit}>
+        <input type='file' name='file' onChange={handleFileChange}></input>
+        <button type='submit'>Submit</button>
+      </form>
+      {status && <h4>{status}</h4>}
+    </div>
       </main>
 
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center gap-2"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </a>
-      </footer>
+     
     </div>
   )
 }
