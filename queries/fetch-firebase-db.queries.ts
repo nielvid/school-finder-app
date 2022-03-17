@@ -9,10 +9,3 @@ export const fetchFirebaseDb = ()=>{
 // return data
  
 }
-
-export const fetchApi= ()=>{
-
-    const data = fect
-return data
- 
-}
