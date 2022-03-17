@@ -27,12 +27,13 @@ const Home: NextPage = () => {
     if (response) setStatus(response.statusText)
   
        console.log(response, "from server")
-       console.log(response.data.data, 'url to upload to  aws s3')
-
-      //  setUrl(response.data.data.data.url)
- 
-const toS3 = await axios.put(`${response.data.data.data}`, image.data)
+       console.log(response.data.data.data.signedRequest, 'url to upload to  aws s3')
+       const toS3 = await axios.put(`${response.data.data.data.signedRequest}`, image.data)
     console.log(toS3, 'response from aws s3')
+         setUrl(response.data.data.data.url)
+      
+ 
+
   }
   
 
@@ -72,9 +73,9 @@ const toS3 = await axios.put(`${response.data.data.data}`, image.data)
       </form>
       {status && <h4>{status}</h4>}
     </div>
-    {/* <div>
-      <img src={url} alt="image from aws" />
-    </div> */}
+    <div>
+      {url ? <Image src={url} alt="image from aws" /> : <p>loading...</p>}
+    </div>
       </main>
 
      
