@@ -19,7 +19,7 @@ const Home: NextPage = () => {
    
       console.log(data, "name and type")
       
-    const response = await axios.post('http://localhost:3010/utility/get-signed-url', data, {
+    const response = await axios.post('https://staging-api.filmmakersmart.com/utility/get-signed-url', data, {
       headers:{
         Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InR5ZUBnbWFpbC5jb20iLCJ1c2VySWQiOiIzMjFjYjc1MC1iYTdkLTRlYjgtODZkNS1iYTIyMzBjMWNhNjYiLCJyb2xlIjoiY2xpZW50IiwiZmlyc3ROYW1lIjoiWWVzamoiLCJsYXN0bmFtZSI6Ikdpc3N5aGgiLCJpYXQiOjE2NDU1MzUzMjcsImV4cCI6MTY1MDcxOTMyN30.RHfuJEmd6nlZPq9jvteIt4THYwCJablnSbomYEzR_Ec`
       }
@@ -30,9 +30,13 @@ const Home: NextPage = () => {
        console.log(response.data.data.data.signedRequest, 'url to upload to  aws s3')
        const toS3 = await axios.put(`${response.data.data.data.signedRequest}`, image.data)
     console.log(toS3, 'response from aws s3')
-         setUrl(response.data.data.data.url)
+       
+        
+       
       
- 
+ setTimeout(()=>{
+    setUrl(response.data.data.data.url)
+}, 3000);
 
   }
   
@@ -74,7 +78,7 @@ const Home: NextPage = () => {
       {status && <h4>{status}</h4>}
     </div>
     <div>
-      {url ? <Image src={url} alt="image from aws" /> : <p>loading...</p>}
+      {url ? <img src={url} alt="image from aws"  width={50} height={50}/> : <p>loading...</p>}
     </div>
       </main>
 
