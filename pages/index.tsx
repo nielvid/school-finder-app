@@ -21,7 +21,7 @@ const Home: NextPage = () => {
       
     const response = await axios.post('https://staging-api.filmmakersmart.com/utility/get-signed-url', data, {
       headers:{
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InR5ZUBnbWFpbC5jb20iLCJ1c2VySWQiOiIzMjFjYjc1MC1iYTdkLTRlYjgtODZkNS1iYTIyMzBjMWNhNjYiLCJyb2xlIjoiY2xpZW50IiwiZmlyc3ROYW1lIjoiWWVzamoiLCJsYXN0bmFtZSI6Ikdpc3N5aGgiLCJpYXQiOjE2NDU1MzUzMjcsImV4cCI6MTY1MDcxOTMyN30.RHfuJEmd6nlZPq9jvteIt4THYwCJablnSbomYEzR_Ec`
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN1cGVyQGZpbG1tYWtlcnNtYXJ0LmNvbSIsInVzZXJJZCI6ImQwMTc3YzUwLTljMmMtNDMzNi04NDQzLWY5OWYyMDcwMGZkOCIsInJvbGUiOiJzdXBlciBhZG1pbiIsImZpcnN0TmFtZSI6IlN1cGVyIiwibGFzdE5hbWUiOiJTdXBlciIsImlhdCI6MTY0Nzg3NDY1NywiZXhwIjoxNjUzMDU4NjU3LCJhdWQiOlsiYWxsIl0sImlzcyI6ImZpbG1tYWtlcnNtYXJ0Iiwic3ViIjoiYXV0aCJ9.qLWV4La6rfat67RoOM3IDbq14B8y-CD5z35b1XLRgGw`
       }
     })
     if (response) setStatus(response.statusText)
@@ -72,7 +72,7 @@ const Home: NextPage = () => {
       {image.preview && <img src={image.preview} width='100' height='100' />}
       <hr></hr>
       <form onSubmit={handleSubmit}>
-        <input type='file' name='file' onChange={handleFileChange}></input>
+        <input type='file' name='file' onChange={handleFileChange} ></input>
         <button type='submit'>Submit</button>
       </form>
       {status && <h4>{status}</h4>}
